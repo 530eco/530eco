@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>530eco | 친환경 공법 청소 상세페이지</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-color: #00a0e9; 
+            --text-dark: #1f2937;
+            --white: #ffffff;
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Noto Sans KR', sans-serif; 
+        }
+        
+        body { 
+            width: 100%;
+            color: var(--text-dark);
+            background-color: var(--white);
+            /* 이미지가 커지면 스크롤하여 구석구석 볼 수 있도록 설정 */
+            overflow-x: auto;
+            overflow-y: auto;
+        }
+
+        /* --------------------------------------------------
+         * [헤더 고정] 이미지가 아무리 커져도 상단 메뉴는 절대 깨지지 않음
+         * -------------------------------------------------- */
+        header {
+            background: var(--white);
+            padding: 0.8rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed; /* 완벽 상단 고정 */
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 9999; /* 이미지 레이어보다 무조건 위 */
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .logo-container { display: flex; align-items: center; text-decoration: none; }
+        .logo-img { height: 45px; width: auto; object-fit: contain; }
+
+        nav a { margin-left: 20px; text-decoration: none; color: var(--text-dark); font-weight: 500; transition: 0.2s; }
+        nav a:hover { color: var(--primary-color); }
+        .btn-call { background: var(--primary-color); color: var(--white) !important; padding: 8px 18px; border-radius: 5px; }
+
+        /* --------------------------------------------------
+         * 상세 이미지 레이아웃 영역
+         * -------------------------------------------------- */
+        .content-wrap { 
+            width: 100%;
+            margin-top: 75px; /* 고정 헤더 높이만큼 아래로 밀기 */
+            padding: 0;
+        }
+
+        .image-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            align-items: flex-start; /* 확대 시 왼쪽 기준으로 커지게 설정 */
+        }
+        
+        .image-container img { 
+            width: 100%;       /* 시작할 땐 화면 가득 찬 상태 */
+            height: auto;     
+            display: block;   
+            margin: 0; 
+            padding: 0; 
+            border: none; 
+            
+            /* 자바스크립트에서 변경해줄 확대 배율 변수 (기본값 1 = 100%) */
+            --zoom-scale: 1;
+            transform: scale(var(--zoom-scale));
+            transform-origin: top left; /* 왼쪽 위 기준 확대 */
+            
+            transition: transform 0.1s ease-out; /* 부드러운 확대 애니메이션 */
+            will-change: transform;
+        }
+
+        @media (max-width: 768px) {
+            header { position: relative; flex-direction: column; gap: 15px; padding: 1rem; }
+            .content-wrap { margin-top: 0; }
+            nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+            nav a { margin: 0 5px; font-size: 0.9rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="530eco.html" class="logo-container">
+            <img src="530eco로고.png" alt="530eco 로고" class="logo-img">
+        </a>
+        <nav>
+            <a href="530eco.html#services">서비스 안내</a>
+            <a href="530eco.html#contact">견적문의</a>
+            <a href="tel:010-4163-0533" class="btn-call"><i class="fas fa-phone"></i> 전화상담</a>
+        </nav>
+    </header>
+
+    <main class="content-wrap">
+        <div class="image-container">
+            <img src="eco4.png" alt="친환경 공법 청소 상세내용" class="zoom-img">
+        </div>
+    </main>
+
+    <script>
+        const images = document.querySelectorAll('.zoom-img');
+        let scales = Array.from({ length: images.length }, () => 1);
+        const MAX_SCALE = 3; // 최대 3배(300%)까지만 확대되도록 제한
+
+        images.forEach((img, index) => {
+            img.addEventListener('wheel', function(e) {
+                // 💡 [핵심 조건] 사용자가 Ctrl 키를 누른 상태일 때만 확대/축소 작동
+                if (e.ctrlKey) {
+                    e.preventDefault(); // 브라우저 창 전체가 줌인/줌아웃 되는 기본 현상 완전 차단
+
+                    if (e.deltaY < 0) {
+                        scales[index] += 0.12; // 휠 위로 굴림: 이미지 확대
+                    } else {
+                        scales[index] -= 0.12; // 휠 아래로 굴림: 이미지 축소
+                    }
+
+                    // 최소 비율은 1(100%), 최대 비율은 MAX_SCALE(300%)로 가두기 (더 작아지지 않음)
+                    scales[index] = Math.max(1, Math.min(MAX_SCALE, scales[index]));
+                    
+                    // 스타일 변수 업데이트
+                    img.style.setProperty('--zoom-scale', scales[index]);
+                }
+                // Ctrl을 누르지 않았다면 아무것도 안 하고 그냥 원래대로 아래위 스크롤이 내려갑니다.
+            }, { passive: false });
+        });
+    </script>
+
+</body>
+</html>
