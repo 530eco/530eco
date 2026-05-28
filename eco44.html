@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>530eco | 친환경 공법 청소 상세페이지</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-color: #00a0e9; 
+            --text-dark: #1f2937;
+            --white: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Noto Sans KR', sans-serif; }
+        
+        body { width: 100%; color: var(--text-dark); background-color: var(--white); overflow-x: auto; overflow-y: auto; }
+
+        header {
+            background: var(--white); padding: 0.8rem 5%;
+            display: flex; justify-content: space-between; align-items: center;
+            position: fixed; top: 0; left: 0; width: 100%;
+            z-index: 9999; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        /* 로고 클릭 시 포인터 변경 */
+        .logo-container { display: flex; align-items: center; text-decoration: none; cursor: pointer; }
+        .logo-img { height: 45px; width: auto; object-fit: contain; }
+
+        nav a { margin-left: 20px; text-decoration: none; color: var(--text-dark); font-weight: 500; transition: 0.2s; }
+        nav a:hover { color: var(--primary-color); }
+        .btn-call { background: var(--primary-color); color: var(--white) !important; padding: 8px 18px; border-radius: 5px; }
+
+        .content-wrap { width: 100%; margin-top: 75px; }
+        .image-container img { 
+            width: 100%; height: auto; display: block;
+            --zoom-scale: 1;
+            transform: scale(var(--zoom-scale));
+            transform-origin: top left;
+            transition: transform 0.1s ease-out;
+            will-change: transform;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="javascript:void(0);" class="logo-container" onclick="goToMain()">
+            <img src="530eco로고.png" alt="530eco 로고" class="logo-img">
+        </a>
+        <nav>
+            <a href="main.html#services">서비스 안내</a>
+            <a href="main.html#contact">견적문의</a>
+            <a href="tel:010-4163-0533" class="btn-call"><i class="fas fa-phone"></i> 전화상담</a>
+        </nav>
+    </header>
+
+    <main class="content-wrap">
+        <div class="image-container">
+            <img src="eco4.png" alt="친환경 공법 청소 상세내용" class="zoom-img">
+        </div>
+    </main>
+
+    <script>
+        // 메인 페이지 이동 함수
+        function goToMain() {
+            // main.html의 최상단(#)으로 이동
+            window.location.href = "main.html#";
+            
+            // 만약 브라우저가 이동 후에도 스크롤을 유지하려고 하면 아래 코드가 최상단으로 강제 고정합니다.
+            window.scrollTo(0, 0);
+        }
+
+        // 이미지 확대 스크립트
+        const images = document.querySelectorAll('.zoom-img');
+        let scales = Array.from({ length: images.length }, () => 1);
+        const MAX_SCALE = 3;
+
+        images.forEach((img, index) => {
+            img.addEventListener('wheel', function(e) {
+                if (e.ctrlKey) {
+                    e.preventDefault();
+                    if (e.deltaY < 0) scales[index] += 0.12;
+                    else scales[index] -= 0.12;
+                    scales[index] = Math.max(1, Math.min(MAX_SCALE, scales[index]));
+                    img.style.setProperty('--zoom-scale', scales[index]);
+                }
+            }, { passive: false });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>530eco | 프리미엄 친환경 청소</title>
+    <style>
+        /* 화면 스크롤을 막고 꽉 차게 만듭니다 */
+        body, html { height: 100%; margin: 0; padding: 0; overflow: hidden; background: #ffffff; font-family: 'Noto Sans KR', sans-serif; }
+        
+        /* 인트로(입장) 화면 스타일 */
+        #intro-screen { 
+            width: 100%; height: 100%; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; 
+            text-align: center; padding: 20px; box-sizing: border-box;
+        }
+        .logo { width: 220px; margin-bottom: 25px; }
+        h1 { font-size: 1.5rem; color: #1f2937; margin-bottom: 10px; }
+        p { font-size: 1rem; color: #6b7280; margin-bottom: 40px; }
+        
+        .btn-start { 
+            padding: 18px 50px; background: #00a0e9; color: white; border: none; border-radius: 50px; 
+            cursor: pointer; font-size: 1.1rem; font-weight: 700; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0,160,233,0.3);
+        }
+        .btn-start:hover { background: #0080bf; transform: translateY(-2px); }
+
+        /* 🔴 [핵심 추가] 메인 홈페이지를 띄울 프레임 (처음엔 안 보이게 숨겨둠) */
+        #main-frame {
+            display: none; width: 100%; height: 100%; border: none;
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="bgm" src="새벽의_길.mp3" loop preload="auto"></audio>
+
+    <div id="intro-screen">
+        <img src="530eco로고.png" alt="530eco 로고" class="logo">
+        <h1>530eco와 함께하는 청결한 세상</h1>
+        <p>음악과 함께 530eco의 프리미엄 서비스를 경험해보세요.</p>
+        
+        <button class="btn-start" onclick="enterSite()">입장하기 (Enter)</button>
+    </div>
+
+    <iframe id="main-frame" name="contentFrame"></iframe>
+
+    <script>
+        function enterSite() {
+            var audio = document.getElementById('bgm');
+            var introScreen = document.getElementById('intro-screen');
+            var mainFrame = document.getElementById('main-frame');
+            
+            // 1. 음악 재생 시작!
+            audio.play().catch(function(error) {
+                console.log("브라우저 환경에 의해 자동재생이 차단될 수 있습니다.");
+            });
+
+            // 🔴 [핵심 수정: 페이지를 이동하지 않고 화면만 교체합니다!]
+            // 2. 인트로 화면을 숨깁니다.
+            introScreen.style.display = 'none';
+            
+            // 3. 숨겨뒀던 홈페이지 프레임을 보여줍니다.
+            mainFrame.style.display = 'block';
+            
+            // 4. 프레임 안에 메인 홈페이지(main.html)를 불러옵니다.
+            mainFrame.src = "main.html";
+        }
+    </script>
+</body>
+</html>
